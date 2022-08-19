@@ -21,19 +21,15 @@ namespace Shelter.Controllers
       _db = db;
     }
 
+    //GET: api/animals
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Animal>>> Get(string name, int age, string species, string breed, string gender, boolean immunizations)
+    public async Task<ActionResult<IEnumerable<Animal>>> Get(string name, int age, string species, string breed, string gender, bool immunizations)
     {
-      var query = _db.ShelterDatabase.AsQueryable();
+      var query = _db.Animals.AsQueryable();
 
       if (name != null)
       {
         query = query.Where(entry => entry.Name == name);
-      }
-
-       if (age != null)
-      {
-        query = query.Where(entry => entry.Age == age);
       }
 
        if (species != null)
@@ -51,10 +47,6 @@ namespace Shelter.Controllers
         query = query.Where(entry => entry.Gender == gender);
       }
       
-      if (immunizations != null)
-      {
-        query = query.Where(entry => entry.Immunizations == immunizations);
-      }
 
       return await query.ToListAsync();
     }
@@ -62,7 +54,7 @@ namespace Shelter.Controllers
     [HttpGet("{id}")]
     public async Task<ActionResult<Animal>> GetAnimal(int id)
     {
-      var animal = await _db.PokedexDatabase.FindAsync(id);
+      var animal = await _db.Animals.FindAsync(id);
       if (animal == null)
       {
           return NotFound();
@@ -70,28 +62,28 @@ namespace Shelter.Controllers
       return animal;
     }
 
-    [HttpGet("page{page}")]
-    public async Task<ActionResult<List<Pokemon>>> GetShelterDatabase(int page)
-    {
-      if (_db.ShelterDatabase == null)
-        return NotFound();
+    // [HttpGet("page{page}")]
+    // public async Task<ActionResult<List<Animal>>> GetShelterDatabase(int page)
+    // {
+    //   if (_db.Animals == null)
+    //     return NotFound();
       
-      var pageResults = 3f;
-      var pageCount = Math.Ceiling(_db.ShelterDatabase.Count() / pageResults);
+    //   var pageResults = 3f;
+    //   var pageCount = Math.Ceiling(_db.Animals.Count() / pageResults);
 
-      var shelterDatabase = await _db.ShelterDatabase
-      .Skip((page - 1) * (int)pageResults)
-      .Take((int)pageResults)
-      .ToListAsync();
+    //   var animals = await _db.Animals
+    //   .Skip((page - 1) * (int)pageResults)
+    //   .Take((int)pageResults)
+    //   .ToListAsync();
 
-      var response = new AnimalResponse
-      {
-        ShelterDatabase = shelterDatabase,
-        CurrentPage = page,
-        Pages = (int)pageCount
-      };
-      return Ok(response);
-    }
+    //   var response = new AnimalPages
+    //   {
+    //     Animals = animals,
+    //     CurrentPage = page,
+    //     Pages = (int)pageCount
+    //   };
+    //   return Ok(response);
+    // }
 
      // PUT: api/Animal/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -125,14 +117,14 @@ namespace Shelter.Controllers
     }
      private bool AnimalExists(int id)
     {
-      return _db.ShelterDatabase.Any(e => e.AnimalId == id);
+      return _db.Animals.Any(e => e.AnimalId == id);
     }
 
       // POST: api/Animal
     [HttpPost]
     public async Task<ActionResult<Animal>> Post(Animal animal)
     {
-      _db.ShelterDatabase.Add(animal);
+      _db.Animals.Add(animal);
       await _db.SaveChangesAsync();
 
       return CreatedAtAction(nameof(GetAnimal), new { id = animal.AnimalId }, animal);
@@ -142,13 +134,13 @@ namespace Shelter.Controllers
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAnimal(int id)
     {
-      var animal = await _db.ShelterDatabase.FindAsync(id);
+      var animal = await _db.Animals.FindAsync(id);
       if (animal == null)
       {
         return NotFound();
       }
 
-      _db.ShelterDatabase.Remove(animal);
+      _db.Animals.Remove(animal);
       await _db.SaveChangesAsync();
 
       return NoContent();

@@ -7,10 +7,7 @@ namespace Shelter.Models
     public ShelterContext(DbContextOptions<ShelterContext> options)
       : base(options)
       {
-        
       }
-      public DbSet<Animal> Animals { get; set; }
-      
       protected override void OnModelCreating(ModelBuilder builder)
       {
         builder.Entity<Animal>()
@@ -29,5 +26,6 @@ namespace Shelter.Models
           new Animal { AnimalId = 12, Name = "Cups",  Age = 10, Species = "Cat", Breed = "Bengal", Gender = "Female", Immunizations = true}
         );
       }
+      public DbSet<Animal> Animals {get; set;}
   }
 }
