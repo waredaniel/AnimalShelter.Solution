@@ -62,30 +62,30 @@ namespace Shelter.Controllers
       return animal;
     }
 
-    // [HttpGet("page{page}")]
-    // public async Task<ActionResult<List<Animal>>> GetShelterDatabase(int page)
-    // {
-    //   if (_db.Animals == null)
-    //     return NotFound();
+    [HttpGet("page{page}")]
+    public async Task<ActionResult<List<Animal>>> GetShelterDatabase(int page)
+    {
+      if (_db.Animals == null)
+        return NotFound();
       
-    //   var pageResults = 3f;
-    //   var pageCount = Math.Ceiling(_db.Animals.Count() / pageResults);
+      var pageResults = 3f;
+      var pageCount = Math.Ceiling(_db.Animals.Count() / pageResults);
 
-    //   var animals = await _db.Animals
-    //   .Skip((page - 1) * (int)pageResults)
-    //   .Take((int)pageResults)
-    //   .ToListAsync();
+      var animals = await _db.Animals
+      .Skip((page - 1) * (int)pageResults)
+      .Take((int)pageResults)
+      .ToListAsync();
 
-    //   var response = new AnimalPages
-    //   {
-    //     Animals = animals,
-    //     CurrentPage = page,
-    //     Pages = (int)pageCount
-    //   };
-    //   return Ok(response);
-    // }
+      var response = new AnimalPages
+      {
+        Animals = animals,
+        CurrentPage = page,
+        Pages = (int)pageCount
+      };
+      return Ok(response);
+    }
 
-     // PUT: api/Animal/5
+     // PUT: api/Animals/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, Animal animal)
@@ -120,7 +120,7 @@ namespace Shelter.Controllers
       return _db.Animals.Any(e => e.AnimalId == id);
     }
 
-      // POST: api/Animal
+      // POST: api/Animals
     [HttpPost]
     public async Task<ActionResult<Animal>> Post(Animal animal)
     {
@@ -130,7 +130,7 @@ namespace Shelter.Controllers
       return CreatedAtAction(nameof(GetAnimal), new { id = animal.AnimalId }, animal);
     }
 
-    // DELETE: api/Animal/5
+    // DELETE: api/Animals/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAnimal(int id)
     {
