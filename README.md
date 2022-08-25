@@ -57,6 +57,10 @@
     "immunizations": true
   }
 
+## Futher Exploration
+
+* This project explored the method of paginating the returned results into groups. The number of results returned per page is set to three for this project in AnimalController.cs but could be increased or decreased to user preference by changing the pageResults variable accordingly. The paginated results can be accessed via the GET method http://localhost:5000/api/animals/page{id} where the {id} references the page number request to be returned. 
+
 ## Known Bugs
 
 * None
